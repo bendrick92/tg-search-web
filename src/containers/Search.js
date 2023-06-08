@@ -1,8 +1,10 @@
 import {useEffect, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import {SearchInput} from '../components';
 
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [searching, setSearching] = useState(false);
@@ -11,18 +13,15 @@ const Search = () => {
   useEffect(() => {
     if (searchParams && searchParams.get('q')) {
       setSearchTerm(searchParams.get('q'));
+
+      fetchEpisodes();
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    if (searchTerm !== '' && !searching && searchResults.length == 0) {
-      setSearching(true);
-      fetchEpisodes();
-    }
-  }, [searchTerm, searching]);
-
   const fetchEpisodes = () => {
-    fetch(`https://localhost:7178/api/v1/episodes/search?q=${searchParams.get('q')}`)
+    setSearching(true);
+
+    fetch(`http://localhost:5000/api/v1/episodes/search?q=${searchParams.get('q')}`)
       .then(response => response.json())
       .then(data => {
         setSearchResults(data);
@@ -82,10 +81,20 @@ const Search = () => {
     );
   });
 
+  if (!searchTerm || searching) {
+    return (
+      <div>Loading...</div>
+    );
+  }
+
   return (
     <div className='w-full flex flex-col justify-center'>
-      <div className='pb-10 text-center'>Showing {searchResults.length} results for "{searchParams.get('q')}"</div>
-      <div className='w-full md:w-128 mx-auto flex flex-col gap-5'>
+      <SearchInput initialSearchTerm={searchTerm}/>
+      <div className='pb-10 text-center flex flex-row'>
+        Showing {searchResults.length} results for "{searchParams.get('q')}"
+        <div className='text-slate-300 hover:cursor-pointer' onClick={() => navigate('/')}>Clear</div>
+      </div>
+      <div className='w-full max-w-2xl mx-auto flex flex-col gap-5'>
         {searchResultsMarkup}
       </div>
     </div>
