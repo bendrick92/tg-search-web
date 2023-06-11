@@ -1,3 +1,4 @@
 import {Layout} from './Layout';
+import SearchInput from './SearchInput';
 
-export { Layout };
+export { Layout, SearchInput };
