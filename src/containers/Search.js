@@ -21,7 +21,7 @@ const Search = () => {
   const fetchEpisodes = () => {
     setSearching(true);
 
-    fetch(`http://localhost:5000/api/v1/episodes/search?q=${searchParams.get('q')}`)
+    fetch(`https://api.topgearsearch.com/api/v1/episodes/search?q=${searchParams.get('q')}`)
       .then(response => response.json())
       .then(data => {
         setSearchResults(data);

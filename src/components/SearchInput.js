@@ -30,7 +30,7 @@ const SearchInput = ({ initialSearchTerm }) => {
 
   const fetchAutocomplete = debounce(() => {
     setAutocompleting(true);
-    fetch(`http://localhost:5000/api/v1/episodes/autocomplete?q=${query}`)
+    fetch(`https://api.topgearsearch.com/api/v1/episodes/autocomplete?q=${query}`)
       .then(response => response.json())
       .then(data => {
         setAutocompleteResults(data.slice(0, 5));
