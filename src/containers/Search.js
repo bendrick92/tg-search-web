@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import {SearchInput} from '../components';
+import {createApiFetch} from '../helpers';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -21,13 +22,9 @@ const Search = () => {
   const fetchEpisodes = () => {
     setSearching(true);
 
-    fetch(`https://api.topgearsearch.com/api/v1/episodes/search?q=${searchParams.get('q')}`)
-      .then(response => response.json())
+    createApiFetch(`/episodes/search?q=${searchParams.get('q')}`)
       .then(data => {
         setSearchResults(data);
-      })
-      .catch((e) => {
-        console.log(e);
       })
       .finally(() => {
         setSearching(false);

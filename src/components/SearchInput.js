@@ -3,6 +3,7 @@ import {faSearch, faSpinner, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {useNavigate} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {debounce} from 'lodash';
+import {createApiFetch} from '../helpers';
 
 const SearchInput = ({ initialSearchTerm }) => {
   const navigate = useNavigate();
@@ -30,14 +31,11 @@ const SearchInput = ({ initialSearchTerm }) => {
 
   const fetchAutocomplete = debounce(() => {
     setAutocompleting(true);
-    fetch(`https://api.topgearsearch.com/api/v1/episodes/autocomplete?q=${query}`)
-      .then(response => response.json())
+
+    createApiFetch(`/episodes/autocomplete?q=${query}`)
       .then(data => {
         setAutocompleteResults(data.slice(0, 5));
         setAutocompleting(false);
-      })
-      .catch((e) => {
-        console.log(e);
       });
   }, 300);
 
