@@ -1,11 +1,11 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faSearch, faSpinner, faTimes} from '@fortawesome/free-solid-svg-icons';
+import {faGear, faSearch, faSpinner, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {useNavigate} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {debounce} from 'lodash';
 import {createApiFetch} from '../helpers';
 
-const SearchInput = ({ initialSearchTerm }) => {
+const SearchInput = ({ initialSearchTerm, showClear, size }) => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState(initialSearchTerm || '');
@@ -37,18 +37,18 @@ const SearchInput = ({ initialSearchTerm }) => {
         setAutocompleteResults(data.slice(0, 5));
         setAutocompleting(false);
       });
-  }, 300);
+  }, 500);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      navigate(`/search?q=${query}`);
+      navigate(`/episodes/search?q=${query}`);
 
       setAutocompleteResults([]);
     }
   };
 
   const handleAutocompleteClick = (term) => {
-    navigate(`/search?q=${term}`);
+    navigate(`/episodes/search?q=${term}`);
 
     setAutocompleteResults([]);
   };
@@ -68,34 +68,32 @@ const SearchInput = ({ initialSearchTerm }) => {
   const autocompleteMarkup = autocompleteResults.length > 0 && (
     <>
       <div className='w-screen h-screen fixed left-0 top-0 z-0' onClick={() => setAutocompleteResults([])}></div>
-      <div className='flex flex-col z-10'>
+      <div className='pt-2 -mt-2 w-full absolute top-full bg-tg-gray rounded-b-lg flex flex-col z-10 overflow-hidden'>
         {autocompleteList}
       </div>
     </>
   );
 
   return (
-    <div className='w-full flex justify-center'>
-      <div className='w-full md:w-128 bg-slate-600 rounded-lg flex-initial flex flex-col overflow-hidden'>
-        <div className='w-full text-lg flex flex-row z-10'>
-          <div className='px-5 py-4 pr-0'>
-            <FontAwesomeIcon icon={autocompleting ? faSpinner : faSearch} className='text-slate-500'/>
-          </div>
-          <input
-            className='px-5 py-4 bg-transparent text-slate-200 focus:outline-none grow'
-            placeholder='Which episode had...'
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyPress}
-          />
-          {query.length > 0 && (
-            <div className='px-5 py-4 pl-0'>
-              <FontAwesomeIcon icon={faTimes} className='text-slate-500 hover:cursor-pointer' onClick={() => setQuery('')}/>
-            </div>
-          )}
+    <div className='w-full bg-tg-gray rounded-lg flex-initial flex flex-col relative'>
+      <div className={`w-full ${size && size === 'lg' ? 'text-lg' : 'text-md' } flex flex-row items-center z-10`}>
+        <div className={`pr-0 px-${size && size === 'lg' ? '5' : '3'} flex-none`}>
+          <FontAwesomeIcon icon={autocompleting ? faGear : faSearch} className={`text-slate-500 ${autocompleting && 'animate-spin'}`}/>
         </div>
-        {autocompleteMarkup}
+        <input
+          className={`min-w-0 ${size && size === 'lg' ? 'px-5 py-4' : 'px-3 py-2'} bg-transparent text-slate-200 focus:outline-none flex-1`}
+          placeholder='Which episode had...'
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyPress}
+        />
+        {showClear && query.length > 0 && (
+          <div className={`px-${size && size === 'lg' ? '5' : '3'} pl-0 flex-none`}>
+            <FontAwesomeIcon icon={faTimes} className='text-slate-500 hover:cursor-pointer' onClick={() => setQuery('')}/>
+          </div>
+        )}
       </div>
+      {autocompleteMarkup}
     </div>
   );
 };

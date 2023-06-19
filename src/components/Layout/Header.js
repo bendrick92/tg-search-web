@@ -5,8 +5,10 @@ const Header = () => {
 
   return (
     <header>
-      <div className='py-10'>
-        <h1 className='text-4xl text-center hover:cursor-pointer' onClick={() => navigate('/')}>Top Gear Search</h1>
+      <div className='flex flex-row justify-center'>
+        <h1 className='py-8 mx-5 text-4xl hover:cursor-pointer' onClick={() => navigate('/')}>
+          Top Gear Search
+        </h1>
       </div>
     </header>
   );

@@ -1,9 +1,9 @@
+@import '@fontsource/anton';
+@import '@fontsource/inter';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import '@fontsource/inter';
-@import '@fontsource/anton';
 
 html, body, #root {
     min-height: 100vh;
@@ -12,7 +12,6 @@ html, body, #root {
 
 body {
     font-family: 'Inter', sans-serif;
-    font-weight: 400;
 }
 
 h1, h2, h3 {

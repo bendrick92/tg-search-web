@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router-dom';
-import {SearchInput} from '../components';
+import {Loading, MetadataList, MetadataText, SearchInput} from '../components';
 import {createApiFetch} from '../helpers';
 
 const Search = () => {
@@ -34,45 +34,117 @@ const Search = () => {
   const searchResultsMarkup = searchResults.map((result, ri) => {
     const hostsMarkup = result.hosts && result.hosts.map((host, hi) => {
       return (
-        <div key={`host-${hi}`}>{host}</div>
+        <li
+          key={`host-${hi}`}
+          className='px-2 py-1 bg-slate-800 rounded-md cursor-pointer'
+          onClick={() => navigate(`/episodes/search?q=${host}`)}
+        >
+          {host}
+        </li>
       );
     });
 
     const carsMarkup = result.cars && result.cars.map((car, ci) => {
       return (
-        <div key={`car-${ci}`}>{car}</div>
+        <li
+          key={`car-${ci}`}
+          className='px-2 py-1 bg-gray-700 rounded-md cursor-pointer'
+          onClick={() => navigate(`/episodes/search?q=${car}`)}
+        >
+          {car}
+        </li>
       );
     });
 
     const featuresMarkup = result.features && result.features.map((feature, fi) => {
       return (
-        <div key={`feature-${fi}`}>{feature}</div>
+        <li key={`feature-${fi}`}>{feature}</li>
       );
     });
 
     const guestsMarkup = result.guests && result.guests.map((guest, gi) => {
       return (
-        <div key={`guest-${gi}`}>{guest}</div>
+        <li key={`guest-${gi}`}>{guest}</li>
       );
     });
 
     return (
-      <div key={`search-result-${ri}}`} className='w-full p-4 bg-slate-600 rounded-lg flex flex-col gap-4'>
-        <h3 className='text-lg'>{result.title}</h3>
-        <div className='flex flex-row gap-2'>
-          {hostsMarkup}
-        </div>
-        <div className='flex flex-row gap-2'>
-          {carsMarkup}
-        </div>
-        <div className='flex flex-row gap-2'>
-          {guestsMarkup}
-        </div>
-        <div className='flex flex-row gap-2'>
-          {featuresMarkup}
+      <div key={`search-result-${ri}}`} className='w-full p-4 flex flex-col gap-4'>
+        <h3
+          className='text-xl cursor-pointer'
+          onClick={() => navigate(`/episodes/${result.id}`)}
+        >
+          {result.title}
+        </h3>
+        <div>
+          <MetadataList
+            className='sm:hidden'
+            data={result.hosts}
+            limit={1}
+            label='Hosts'
+            key='host'
+          />
+          <MetadataList
+            className='hidden sm:block'
+            data={result.hosts}
+            label='Hosts'
+            key='host'
+          />
         </div>
         <div>
-          {result.summary}
+          <MetadataList
+            className='sm:hidden'
+            data={result.cars}
+            limit={2}
+            label='Cars'
+            key='car'
+          />
+          <MetadataList
+            className='hidden sm:block'
+            data={result.cars}
+            label='Cars'
+            key='car'
+          />
+        </div>
+        <div>
+          <MetadataList
+            className='sm:hidden'
+            data={result.guests}
+            limit={2}
+            label='Guests'
+            key='guest'
+          />
+          <MetadataList
+            className='hidden sm:block'
+            data={result.guests}
+            label='Guests'
+            key='guest'
+          />
+        </div>
+        <div>
+          <MetadataList
+            className='sm:hidden'
+            data={result.features}
+            limit={2}
+            label='Features'
+            key='feature'
+          />
+          <MetadataList
+            className='hidden sm:block'
+            data={result.features}
+            label='Features'
+            key='feature'
+          />
+        </div>
+        <div>
+          <MetadataText
+            data={result.summary}
+            label='Summary'
+            limitLines
+          />
+        </div>
+        <div className='px-3 py-2 bg-tg-gray rounded-md text-sm self-end cursor-pointer'>
+          View
         </div>
       </div>
     );
@@ -80,18 +152,14 @@ const Search = () => {
 
   if (!searchTerm || searching) {
     return (
-      <div>Loading...</div>
+      <Loading/>
     );
   }
 
   return (
-    <div className='w-full flex flex-col justify-center'>
-      <SearchInput initialSearchTerm={searchTerm}/>
-      <div className='pb-10 text-center flex flex-row'>
-        Showing {searchResults.length} results for "{searchParams.get('q')}"
-        <div className='text-slate-300 hover:cursor-pointer' onClick={() => navigate('/')}>Clear</div>
-      </div>
-      <div className='w-full max-w-2xl mx-auto flex flex-col gap-5'>
+    <div className='w-full flex flex-col'>
+      <SearchInput initialSearchTerm={searchTerm} showClear size='md'/>
+      <div className='w-full max-w-5xl mx-auto mt-8 flex flex-col gap-8'>
         {searchResultsMarkup}
       </div>
     </div>

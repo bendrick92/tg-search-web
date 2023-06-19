@@ -1,13 +1,14 @@
 import Header from './Header';
 import Footer from './Footer';
+import {Outlet} from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = ({ showHeader = true }) => {
   return (
-    <div className='w-full min-h-screen flex flex-col bg-slate-800 text-white'>
-      <div className='max-w-full md:max-w-5xl px-8 mx-auto flex-1 flex flex-col'>
-        <Header/>
-        <main className='min-w-full w-full mt-10 grow'>
-          {children}
+    <div className='w-full min-h-screen flex flex-col bg-tg-background text-tg-white'>
+      <div className='flex-1 flex flex-col'>
+        {showHeader && <Header/>}
+        <main className='max-w-full md:max-w-3xl w-full px-8 mx-auto mt-5 grow flex flex-col'>
+          <Outlet/>
         </main>
         <Footer/>
       </div>
