@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faGear, faSearch, faSpinner, faTimes} from '@fortawesome/free-solid-svg-icons';
+import {faGear, faSearch, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {useNavigate} from 'react-router-dom';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {debounce} from 'lodash';
 import {createApiFetch} from '../helpers';
 
@@ -17,27 +17,33 @@ const SearchInput = ({ initialSearchTerm, showClear, size }) => {
     setAutocompleteResults([]);
   }, []);
 
-  useEffect(() => {
-    if (initialSearchTerm && query === initialSearchTerm) {
-      return; // If page just loaded in
+  const handleChange = (e) => {
+    if (query === e.target.value) {
+      return;
     }
 
-    if (query && query.trim() !== '') {
-      fetchAutocomplete();
-    } else {
+    setQuery(e.target.value);
+
+    if (!e.target.value) {
       setAutocompleteResults([]);
     }
-  }, [initialSearchTerm, query]);
 
-  const fetchAutocomplete = debounce(() => {
-    setAutocompleting(true);
+    debouncedAutocomplete(e);
+  };
 
-    createApiFetch(`/episodes/autocomplete?q=${query}`)
-      .then(data => {
-        setAutocompleteResults(data.slice(0, 5));
-        setAutocompleting(false);
-      });
-  }, 500);
+  const debouncedAutocomplete = useMemo(() =>
+    debounce((e) => {
+      if (e.target.value && !autocompleting) {
+        setAutocompleting(true);
+
+        createApiFetch(`/episodes/autocomplete?q=${e.target.value}`)
+          .then(data => {
+            setAutocompleteResults(data.slice(0, 5));
+            setAutocompleting(false);
+          });
+      }
+    }, 500)
+  , [autocompleting]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -50,6 +56,12 @@ const SearchInput = ({ initialSearchTerm, showClear, size }) => {
   const handleAutocompleteClick = (term) => {
     navigate(`/episodes/search?q=${term}`);
 
+    setAutocompleteResults([]);
+  };
+
+  const handleClearClick = () => {
+    setQuery('');
+    setAutocompleting(false);
     setAutocompleteResults([]);
   };
 
@@ -84,12 +96,12 @@ const SearchInput = ({ initialSearchTerm, showClear, size }) => {
           className={`min-w-0 ${size && size === 'lg' ? 'px-5 py-4' : 'px-3 py-2'} bg-transparent text-slate-200 focus:outline-none flex-1`}
           placeholder='Which episode had...'
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleChange}
           onKeyDown={handleKeyPress}
         />
         {showClear && query.length > 0 && (
           <div className={`px-${size && size === 'lg' ? '5' : '3'} pl-0 flex-none`}>
-            <FontAwesomeIcon icon={faTimes} className='text-slate-500 hover:cursor-pointer' onClick={() => setQuery('')}/>
+            <FontAwesomeIcon icon={faTimes} className='text-slate-500 hover:cursor-pointer' onClick={handleClearClick}/>
           </div>
         )}
       </div>

@@ -14,21 +14,17 @@ const Episode = () => {
 
   useEffect(() => {
     if (id) {
-      fetchEpisode();
+      setLoading(true);
+
+      createApiFetch(`/episodes/${id}`)
+        .then(data => {
+          setEpisode(data);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [id]);
-
-  const fetchEpisode = () => {
-    setLoading(true);
-
-    createApiFetch(`/episodes/${id}`)
-      .then(data => {
-        setEpisode(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   if (!episode || loading) {
     return (

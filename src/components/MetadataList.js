@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-const MetadataList = ({ data, limit, label, key, ...rest }) => {
+const MetadataList = ({ data, limit, label, keyPrefix, ...rest }) => {
   const [limitedData, setLimitedData] = useState([data]);
 
   useEffect(() => {
@@ -9,21 +9,17 @@ const MetadataList = ({ data, limit, label, key, ...rest }) => {
     }
 
     if (limit && limit >= 1) {
-      if (limit > data.length) {
-        limit = data.length;
-      }
-
-      setLimitedData(data.slice(0, limit));
+      setLimitedData(data.slice(0, limit > data.length ? data.length : limit));
     }
     else {
       setLimitedData(data);
     }
-  }, [data]);
+  }, [data, limit]);
 
   const listMarkup = limitedData && limitedData.map((item, i) => {
     return (
       <li
-        key={`${key}-${i}`}
+        key={`${keyPrefix}-${i}`}
         className='px-2 py-1 border-solid border-2 border-tg-gray rounded-md cursor-pointer'
       >
         {item}
@@ -32,10 +28,7 @@ const MetadataList = ({ data, limit, label, key, ...rest }) => {
   });
 
   const moreMarkup = data.length > limitedData.length && (
-    <li
-      key={`${key}-${limitedData.length}`}
-      className='px-2 py-1 border-solid border-2 border-tg-gray rounded-md cursor-pointer'
-    >
+    <li className='px-2 py-1 border-solid border-2 border-tg-gray rounded-md cursor-pointer'>
       +{data.length - limitedData.length} more
     </li>
   );

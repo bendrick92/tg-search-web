@@ -15,59 +15,19 @@ const Search = () => {
     if (searchParams && searchParams.get('q')) {
       setSearchTerm(searchParams.get('q'));
 
-      fetchEpisodes();
+      setSearching(true);
+
+      createApiFetch(`/episodes/search?q=${searchParams.get('q')}`)
+        .then(data => {
+          setSearchResults(data);
+        })
+        .finally(() => {
+          setSearching(false);
+        });
     }
   }, [searchParams]);
 
-  const fetchEpisodes = () => {
-    setSearching(true);
-
-    createApiFetch(`/episodes/search?q=${searchParams.get('q')}`)
-      .then(data => {
-        setSearchResults(data);
-      })
-      .finally(() => {
-        setSearching(false);
-      });
-  };
-
   const searchResultsMarkup = searchResults.map((result, ri) => {
-    const hostsMarkup = result.hosts && result.hosts.map((host, hi) => {
-      return (
-        <li
-          key={`host-${hi}`}
-          className='px-2 py-1 bg-slate-800 rounded-md cursor-pointer'
-          onClick={() => navigate(`/episodes/search?q=${host}`)}
-        >
-          {host}
-        </li>
-      );
-    });
-
-    const carsMarkup = result.cars && result.cars.map((car, ci) => {
-      return (
-        <li
-          key={`car-${ci}`}
-          className='px-2 py-1 bg-gray-700 rounded-md cursor-pointer'
-          onClick={() => navigate(`/episodes/search?q=${car}`)}
-        >
-          {car}
-        </li>
-      );
-    });
-
-    const featuresMarkup = result.features && result.features.map((feature, fi) => {
-      return (
-        <li key={`feature-${fi}`}>{feature}</li>
-      );
-    });
-
-    const guestsMarkup = result.guests && result.guests.map((guest, gi) => {
-      return (
-        <li key={`guest-${gi}`}>{guest}</li>
-      );
-    });
-
     return (
       <div key={`search-result-${ri}}`} className='w-full p-4 flex flex-col gap-4'>
         <h3
@@ -82,13 +42,13 @@ const Search = () => {
             data={result.hosts}
             limit={1}
             label='Hosts'
-            key='host'
+            keyPrefix={`${result.id}-host`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.hosts}
             label='Hosts'
-            key='host'
+            keyPrefix={`${result.id}-sm-host`}
           />
         </div>
         <div>
@@ -97,13 +57,13 @@ const Search = () => {
             data={result.cars}
             limit={2}
             label='Cars'
-            key='car'
+            keyPrefix={`${result.id}-car`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.cars}
             label='Cars'
-            key='car'
+            keyPrefix={`${result.id}-sm-car`}
           />
         </div>
         <div>
@@ -112,13 +72,13 @@ const Search = () => {
             data={result.guests}
             limit={2}
             label='Guests'
-            key='guest'
+            keyPrefix={`${result.id}-guest`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.guests}
             label='Guests'
-            key='guest'
+            keyPrefix={`${result.id}-sm-guest`}
           />
         </div>
         <div>
@@ -127,13 +87,13 @@ const Search = () => {
             data={result.features}
             limit={2}
             label='Features'
-            key='feature'
+            keyPrefix={`${result.id}-feature`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.features}
             label='Features'
-            key='feature'
+            keyPrefix={`${result.id}-sm-feature`}
           />
         </div>
         <div>
