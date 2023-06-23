@@ -1,7 +1,11 @@
 import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import Highlighter from "react-highlight-words";
 
-const MetadataList = ({ data, limit, label, keyPrefix, ...rest }) => {
-  const [limitedData, setLimitedData] = useState([data]);
+const MetadataList = ({ data, limit, label, searchTerm, keyPrefix, ...rest }) => {
+  const navigate = useNavigate();
+
+  const [limitedData, setLimitedData] = useState([...data]);
 
   useEffect(() => {
     if (!data || data.length === 0) {
@@ -20,15 +24,21 @@ const MetadataList = ({ data, limit, label, keyPrefix, ...rest }) => {
     return (
       <li
         key={`${keyPrefix}-${i}`}
-        className='px-2 py-1 border-solid border-2 border-tg-gray rounded-md cursor-pointer'
+        className='px-2 py-1 border-solid border-2 border-gray-600 rounded-md cursor-pointer'
+        onClick={() => navigate(`/episodes/search?q=${item.trim().toLowerCase()}`)}
       >
-        {item}
+        <Highlighter
+          highlightTag='span'
+          highlightClassName='font-black text-white'
+          searchWords={[searchTerm]}
+          textToHighlight={item}
+        />
       </li>
     );
   });
 
   const moreMarkup = data.length > limitedData.length && (
-    <li className='px-2 py-1 border-solid border-2 border-tg-gray rounded-md cursor-pointer'>
+    <li className='px-2 py-1 border-solid border-2 border-gray-600 rounded-md cursor-pointer'>
       +{data.length - limitedData.length} more
     </li>
   );
@@ -36,7 +46,7 @@ const MetadataList = ({ data, limit, label, keyPrefix, ...rest }) => {
   return (
     <div {...rest}>
       <h4 className='mb-2 text-md text-gray-400'>{label}</h4>
-      <ul className='flex flex-row gap-3 flex-wrap'>
+      <ul className='flex flex-row gap-3 flex-wrap text-gray-100'>
         {listMarkup}
         {moreMarkup}
       </ul>

@@ -3,8 +3,5 @@ export const createApiFetch = (url) => {
     .then(response => response.json())
     .then(data => {
       return data;
-    })
-    .catch(e => {
-      console.log(e);
     });
 };

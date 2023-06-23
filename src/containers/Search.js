@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import {Loading, MetadataList, MetadataText, SearchInput} from '../components';
+import Error from './Error';
 import {createApiFetch} from '../helpers';
 
 const Search = () => {
@@ -10,6 +11,7 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchError, setSearchError] = useState(false);
 
   useEffect(() => {
     if (searchParams && searchParams.get('q')) {
@@ -21,15 +23,22 @@ const Search = () => {
         .then(data => {
           setSearchResults(data);
         })
+        .catch(() => {
+          setSearchError(true);
+        })
         .finally(() => {
           setSearching(false);
         });
     }
   }, [searchParams]);
 
-  const searchResultsMarkup = searchResults.map((result, ri) => {
+  if (searchError) {
+    return <Error/>;
+  }
+
+  const searchResultsMarkup = searchResults && searchResults.map((result, ri) => {
     return (
-      <div key={`search-result-${ri}}`} className='w-full p-4 flex flex-col gap-4'>
+      <div key={`search-result-${ri}}`} className='w-full pb-4 flex flex-col gap-5'>
         <h3
           className='text-xl cursor-pointer'
           onClick={() => navigate(`/episodes/${result.id}`)}
@@ -41,12 +50,14 @@ const Search = () => {
             className='sm:hidden'
             data={result.hosts}
             limit={1}
+            searchTerm={searchTerm}
             label='Hosts'
             keyPrefix={`${result.id}-host`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.hosts}
+            searchTerm={searchTerm}
             label='Hosts'
             keyPrefix={`${result.id}-sm-host`}
           />
@@ -56,12 +67,14 @@ const Search = () => {
             className='sm:hidden'
             data={result.cars}
             limit={2}
+            searchTerm={searchTerm}
             label='Cars'
             keyPrefix={`${result.id}-car`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.cars}
+            searchTerm={searchTerm}
             label='Cars'
             keyPrefix={`${result.id}-sm-car`}
           />
@@ -71,12 +84,14 @@ const Search = () => {
             className='sm:hidden'
             data={result.guests}
             limit={2}
+            searchTerm={searchTerm}
             label='Guests'
             keyPrefix={`${result.id}-guest`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.guests}
+            searchTerm={searchTerm}
             label='Guests'
             keyPrefix={`${result.id}-sm-guest`}
           />
@@ -86,12 +101,14 @@ const Search = () => {
             className='sm:hidden'
             data={result.features}
             limit={2}
+            searchTerm={searchTerm}
             label='Features'
             keyPrefix={`${result.id}-feature`}
           />
           <MetadataList
             className='hidden sm:block'
             data={result.features}
+            searchTerm={searchTerm}
             label='Features'
             keyPrefix={`${result.id}-sm-feature`}
           />
@@ -101,9 +118,13 @@ const Search = () => {
             data={result.summary}
             label='Summary'
             limitLines
+            searchTerm={searchTerm}
           />
         </div>
-        <div className='px-3 py-2 bg-tg-gray rounded-md text-sm self-end cursor-pointer'>
+        <div
+          className='px-3 py-2 bg-tg-gray rounded-md text-sm self-end cursor-pointer'
+          onClick={() => navigate(`/episodes/${result.id}`)}
+        >
           View
         </div>
       </div>
@@ -117,9 +138,12 @@ const Search = () => {
   }
 
   return (
-    <div className='w-full flex flex-col'>
+    <div className='w-full flex flex-col gap-7'>
       <SearchInput initialSearchTerm={searchTerm} showClear size='md'/>
-      <div className='w-full max-w-5xl mx-auto mt-8 flex flex-col gap-8'>
+      <div>
+        Showing {searchResults.length} results for "{searchTerm}"
+      </div>
+      <div className='w-full max-w-5xl mx-auto flex flex-col gap-6'>
         {searchResultsMarkup}
       </div>
     </div>

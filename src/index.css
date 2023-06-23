@@ -6,12 +6,12 @@
 @tailwind utilities;
 
 html, body, #root {
-    min-height: 100vh;
     height: auto;
 }
 
 body {
     font-family: 'Inter', sans-serif;
+    font-weight: 300;
 }
 
 h1, h2, h3 {
