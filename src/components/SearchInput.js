@@ -6,7 +6,7 @@ import {debounce} from 'lodash';
 import {createApiFetch} from '../helpers';
 import Alert from './Alert';
 
-const SearchInput = ({ initialSearchTerm, showClear, size }) => {
+const SearchInput = ({ initialSearchTerm, size }) => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState(initialSearchTerm || '');
@@ -105,22 +105,25 @@ const SearchInput = ({ initialSearchTerm, showClear, size }) => {
   return (
     <>
       <div className='w-full bg-tg-gray rounded-lg flex-initial flex flex-col relative'>
-        <div className={`w-full ${size && size === 'lg' ? 'text-lg' : 'text-md' } flex flex-row items-center z-10`}>
-          <div className={`pr-0 px-${size && size === 'lg' ? '5' : '4'} flex-none`}>
-            <FontAwesomeIcon icon={autocompleting ? faGear : faSearch} size='lg' className={`text-gray-500 ${autocompleting && 'animate-spin'}`}/>
-          </div>
+        <div className={`w-full ${size && size === 'lg' ? 'text-lg' : 'text-md' } flex flex-row items-center z-20`}>
           <input
-            className={`min-w-0 ${size && size === 'lg' ? 'px-5 py-5' : 'px-3 py-3'} bg-transparent text-gray-200 focus:outline-none flex-1`}
+            className={`min-w-0 ${size && size === 'lg' ? 'px-5' : 'px-3'} bg-transparent text-gray-200 focus:outline-none flex-1`}
             placeholder='Which episode had...'
             value={query}
             onChange={handleChange}
             onKeyDown={handleKeyPress}
           />
-          {showClear && query.length > 0 && (
+          {query.length > 0 && (
             <div className={`px-${size && size === 'lg' ? '5' : '4'} pl-0 flex-none`}>
               <FontAwesomeIcon icon={faTimes} size='lg' className='text-gray-500 hover:cursor-pointer' onClick={handleClearClick}/>
             </div>
           )}
+          <div
+            className={`px-${size && size === 'lg' ? '5' : '4'} py-3 flex-none rounded-r-lg ${autocompleteResults.length > 0 && 'rounded-br-none'} ${query.length > 0 && 'cursor-pointer bg-teal-600 text-gray-200 hover:bg-teal-500'} z-10`}
+            onClick={() => query.length > 0 && navigate(`/episodes/search?q=${query}`)}
+          >
+            <FontAwesomeIcon icon={autocompleting ? faGear : faSearch} size='lg' className={autocompleting ? 'animate-spin' : ''}/>
+          </div>
         </div>
         {autocompleteMarkup}
       </div>

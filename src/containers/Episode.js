@@ -58,7 +58,7 @@ const Episode = () => {
       <div className='w-full flex flex-col gap-4'>
         <span className='text-gray-400 cursor-pointer' onClick={() => navigate(-1)}>
           <FontAwesomeIcon icon={faChevronLeft} size='sm' className='mr-2'/>
-          Back
+          Back to search results
         </span>
         <h2 className='text-2xl uppercase font-black'>{episode.title}</h2>
         <div>

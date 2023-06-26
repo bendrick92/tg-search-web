@@ -7,11 +7,11 @@ const MetadataText = ({ data, limitLines, searchTerm, label, ...rest }) => {
 
   return (
     <div {...rest}>
-      <h4 className='mb-2 text-md text-gray-400'>{label}</h4>
+      <h4 className='mb-1.5 text-md text-gray-400'>{label}</h4>
       <p className={limitLines && 'line-clamp-5 text-gray-200'}>
         <Highlighter
           highlightTag='span'
-          highlightClassName='font-black text-white text-lg'
+          highlightClassName='font-black text-teal-500'
           searchWords={[searchTerm]}
           textToHighlight={data}
         />

@@ -3,6 +3,8 @@ import {useNavigate, useSearchParams} from 'react-router-dom';
 import {Loading, MetadataList, MetadataText, SearchInput} from '../components';
 import Error from './Error';
 import {createApiFetch} from '../helpers';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -39,12 +41,14 @@ const Search = () => {
   const searchResultsMarkup = searchResults && searchResults.map((result, ri) => {
     return (
       <div key={`search-result-${ri}}`} className='w-full pb-4 flex flex-col gap-5'>
-        <h3
-          className='mb-0 text-2xl uppercase font-black cursor-pointer'
-          onClick={() => navigate(`/episodes/${result.id}`)}
-        >
-          {result.title}
-        </h3>
+        <div className='flex flex-col gap-3'>
+          <div className='flex flex-row items-center gap-2' onClick={() => navigate(`/episodes/${result.id}`)}>
+            <h3 className='mb-0 text-2xl uppercase font-black leading-5 cursor-pointer underline underline-offset-4 decoration-2 decoration-teal-600 hover:decoration-teal-500'>
+              {result.title}
+            </h3>
+          </div>
+          <div className='text-gray-400 text-sm'>Originally aired {result.airDate}</div>
+        </div>
         <div>
           <MetadataList
             className='sm:hidden'
@@ -122,10 +126,11 @@ const Search = () => {
           />
         </div>
         <div
-          className='px-5 py-2 bg-gray-700 rounded-md text-md self-end cursor-pointer'
+          className='px-6 py-2 bg-teal-600 rounded-md text-md self-end cursor-pointer hover:bg-teal-500 flex flex-row items-center gap-2'
           onClick={() => navigate(`/episodes/${result.id}`)}
         >
-          View
+          <span>Details</span>
+          <FontAwesomeIcon icon={faChevronRight} size='xs'/>
         </div>
       </div>
     );
@@ -139,7 +144,7 @@ const Search = () => {
 
   return (
     <div className='w-full flex flex-col gap-8'>
-      <SearchInput initialSearchTerm={searchTerm} showClear size='md'/>
+      <SearchInput initialSearchTerm={searchTerm} size='md'/>
       <div>
         Showing {searchResults.length} results for "{searchTerm}"
       </div>
