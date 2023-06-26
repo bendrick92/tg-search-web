@@ -77,7 +77,7 @@ const SearchInput = ({ initialSearchTerm, showClear, size }) => {
       <div
         key={`suggestion-${index}`}
         onClick={() => handleAutocompleteClick(result)}
-        className='p-3 hover:bg-slate-500 hover:cursor-pointer'
+        className='p-3 hover:bg-gray-500 hover:cursor-pointer'
       >
         {result}
       </div>
@@ -106,19 +106,19 @@ const SearchInput = ({ initialSearchTerm, showClear, size }) => {
     <>
       <div className='w-full bg-tg-gray rounded-lg flex-initial flex flex-col relative'>
         <div className={`w-full ${size && size === 'lg' ? 'text-lg' : 'text-md' } flex flex-row items-center z-10`}>
-          <div className={`pr-0 px-${size && size === 'lg' ? '5' : '3'} flex-none`}>
-            <FontAwesomeIcon icon={autocompleting ? faGear : faSearch} className={`text-slate-500 ${autocompleting && 'animate-spin'}`}/>
+          <div className={`pr-0 px-${size && size === 'lg' ? '5' : '4'} flex-none`}>
+            <FontAwesomeIcon icon={autocompleting ? faGear : faSearch} size='lg' className={`text-gray-500 ${autocompleting && 'animate-spin'}`}/>
           </div>
           <input
-            className={`min-w-0 ${size && size === 'lg' ? 'px-5 py-4' : 'px-3 py-2'} bg-transparent text-slate-200 focus:outline-none flex-1`}
+            className={`min-w-0 ${size && size === 'lg' ? 'px-5 py-5' : 'px-3 py-3'} bg-transparent text-gray-200 focus:outline-none flex-1`}
             placeholder='Which episode had...'
             value={query}
             onChange={handleChange}
             onKeyDown={handleKeyPress}
           />
           {showClear && query.length > 0 && (
-            <div className={`px-${size && size === 'lg' ? '5' : '3'} pl-0 flex-none`}>
-              <FontAwesomeIcon icon={faTimes} className='text-slate-500 hover:cursor-pointer' onClick={handleClearClick}/>
+            <div className={`px-${size && size === 'lg' ? '5' : '4'} pl-0 flex-none`}>
+              <FontAwesomeIcon icon={faTimes} size='lg' className='text-gray-500 hover:cursor-pointer' onClick={handleClearClick}/>
             </div>
           )}
         </div>

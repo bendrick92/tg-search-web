@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'tg-heading': 'Anton, sans-serif',
+      },
       colors: {
         'tg-background': '#161819',
         'tg-white': '#fcfbfa',

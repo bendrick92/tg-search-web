@@ -29,7 +29,7 @@ const MetadataList = ({ data, limit, label, searchTerm, keyPrefix, ...rest }) =>
       >
         <Highlighter
           highlightTag='span'
-          highlightClassName='font-black text-white'
+          highlightClassName='font-black text-white text-lg'
           searchWords={[searchTerm]}
           textToHighlight={item}
         />
@@ -46,7 +46,7 @@ const MetadataList = ({ data, limit, label, searchTerm, keyPrefix, ...rest }) =>
   return (
     <div {...rest}>
       <h4 className='mb-2 text-md text-gray-400'>{label}</h4>
-      <ul className='flex flex-row gap-3 flex-wrap text-gray-100'>
+      <ul className='flex flex-row gap-3 flex-wrap text-gray-200'>
         {listMarkup}
         {moreMarkup}
       </ul>

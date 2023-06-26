@@ -1,5 +1,6 @@
+@import '@fontsource-variable/oswald';
+@import '@fontsource/source-sans-pro';
 @import '@fontsource/anton';
-@import '@fontsource/inter';
 
 @tailwind base;
 @tailwind components;
@@ -10,11 +11,12 @@ html, body, #root {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
+    font-family: 'Source Sans Pro', sans-serif;
+    letter-spacing: 0.01em;
 }
 
 h1, h2, h3 {
-    font-family: 'Anton', sans-serif;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: -0.02em;
 }
 

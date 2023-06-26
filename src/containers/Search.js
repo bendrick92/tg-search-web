@@ -40,7 +40,7 @@ const Search = () => {
     return (
       <div key={`search-result-${ri}}`} className='w-full pb-4 flex flex-col gap-5'>
         <h3
-          className='text-xl cursor-pointer'
+          className='mb-0 text-2xl uppercase font-black cursor-pointer'
           onClick={() => navigate(`/episodes/${result.id}`)}
         >
           {result.title}
@@ -122,7 +122,7 @@ const Search = () => {
           />
         </div>
         <div
-          className='px-3 py-2 bg-tg-gray rounded-md text-sm self-end cursor-pointer'
+          className='px-5 py-2 bg-gray-700 rounded-md text-md self-end cursor-pointer'
           onClick={() => navigate(`/episodes/${result.id}`)}
         >
           View
@@ -138,7 +138,7 @@ const Search = () => {
   }
 
   return (
-    <div className='w-full flex flex-col gap-7'>
+    <div className='w-full flex flex-col gap-8'>
       <SearchInput initialSearchTerm={searchTerm} showClear size='md'/>
       <div>
         Showing {searchResults.length} results for "{searchTerm}"

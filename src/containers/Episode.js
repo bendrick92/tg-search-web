@@ -60,7 +60,7 @@ const Episode = () => {
           <FontAwesomeIcon icon={faChevronLeft} size='sm' className='mr-2'/>
           Back
         </span>
-        <h2 className='text-xl'>{episode.title}</h2>
+        <h2 className='text-2xl uppercase font-black'>{episode.title}</h2>
         <div>
           <MetadataList data={episode.hosts} label='Hosts' key='host'/>
         </div>
