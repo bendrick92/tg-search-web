@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Top Gear Search",
+  "name": "Top Gear Search",
+  "description": "Search classic Top Gear episodes by keyword",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +9,19 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "icon-white.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "295x295"
     },
     {
-      "src": "logo512.png",
+      "src": "icon-black.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "295x295"
     }
   ],
+  "categories": ["reference", "lookup", "television", "automotive", "cars", "petrolheads"],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#323339",
+  "background_color": "#161819"
 }
